@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-const User = require("./models/user");
+const User = require("./models/user")
 const session = require("express-session");
 const methodOverride = require("method-override");
 const app = express();
@@ -10,6 +10,10 @@ const app = express();
 
 const passport = require("passport");
 const localStrategy = require("passport-local");
+
+const userController = require("./controllers/userController");
+const errorController = require("./controllers/errorController");
+const homeController = require("./controllers/homeController");
 
 mongoose
   .connect("mongodb://localhost:27017/lottery", {
@@ -50,4 +54,31 @@ app.listen(3000, () => {
   console.log("Im listening on port 3000");
 });
 
+
+//MiDDLEWARE
+const requireLogin = (req, res, next) => {
+  if (!req.session.user_id) {
+    return res.redirect("/login");
+  } else {
+    next();
+  }
+};
+
+app.get("/login", userController.login);
+
+app.get("/home", homeController.getHomePage);
+
+app.post("/login", userController.loginPost);
+
+app.get("/register", userController.register);
+
+app.post("/register", userController.registerPost);
+
+
+
+app.get("/", (req, res) => {
+  res.redirect("/home");
+});
+// Any path not matching one of mine above will hit this ! :)
+app.get("*", errorController.getError);
 

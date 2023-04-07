@@ -2,7 +2,7 @@ const homeView = require("../views/home.js");
 const bcrypt = require("bcrypt");
 const st = require("../styles");
 
-const User = require("./models/user");
+const User = require("../models/user.js")
 const mainContent = homeView.mainHtmlSkeleton;
 const style = st.styles();
 
